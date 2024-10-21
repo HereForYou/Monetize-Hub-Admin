@@ -24,7 +24,7 @@ function App() {
 
   return (
     <div className='w-full sm:p-10 p-2 h-screen'>
-      {!isVerified ? (
+      {isVerified ? (
         <div>
           <div className='flex w-full justify-evenly bg-green-400 items-center py-1 mb-5'>
             <p
