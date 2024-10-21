@@ -25,14 +25,22 @@ const LeaderBoard = () => {
   const clearPoint = (tgId: string) => {
     axios.put(`${ENDPOINT}/api/user/clear/${tgId}`).then((res) => {
       console.log("Clear Point: ", res.data);
-      setAllUsers((prevUsers: any) => {
-        const index = prevUsers.findIndex((user: any) => user.tgId === res.data.tgId);
-        if (index !== -1) {
-          const updateUsers = [...prevUsers];
-          updateUsers[index] = { ...res.data };
-          return updateUsers;
-        }
-      });
+      const data = res.data;
+      if (!res.data?.length) {
+        console.log("Object");
+        setAllUsers((prevUsers: any[]) => {
+          const index = prevUsers.findIndex((user: any) => user.tgId === data.tgId);
+          if (index !== -1) {
+            const updateUsers = [...prevUsers];
+            updateUsers[index] = { ...data };
+            return updateUsers;
+          }
+          return prevUsers; // Return previous state if user not found
+        });
+      } else {
+        console.log("Array");
+        setAllUsers(data);
+      }
     });
   };
 
@@ -47,6 +55,11 @@ const LeaderBoard = () => {
           </button>
         </div>
       ))}
+      <button
+        className='text-sm sm:text-base flex w-full mt-4 justify-center bg-green-400 hover:bg-green-500 hover:text-white transition-all duration-500'
+        onClick={() => clearPoint("all")}>
+        Clear Point
+      </button>
     </div>
   );
 };
